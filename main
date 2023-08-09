@@ -1,0 +1,81 @@
+cardapio = [['cachorro quente', '100', 1.20],
+            ['bauru simples', '101', 1.50],
+            ['bauru com ovo', '102', 1.70],
+            ['refrigerante', '103', 2.0]]
+
+
+
+
+pedido_cliente = []
+valor_pedido = []
+qtd_pedido = []
+valor_total = 0
+
+
+
+
+print(f"{'=' * 10}BEM VINDO A LANCHONETE MIL ESTRELAS{'=' * 10}")
+resposta = input('Para iniciar seu pedido digite "SIM". Para finalizar, digite "FIM"\n'.lower())
+
+
+
+while resposta == 'sim':
+    print(f"Código{'Item':^15}{'Valor':^15}")
+    for i, item in enumerate(cardapio):
+        print(f'{item[1]}         {item[0]:^15}      R${item[2]}')
+
+
+
+    pedido = input("Escolha o item escrevendo seu código ou nome, ou digite 'FIM' para terminar seu pedido!\n".lower())
+
+    
+
+    if pedido == 'fim':
+        break
+
+    qtd = input("Quantidade: ")
+
+    if qtd.isnumeric() and int(qtd) > 0:
+        qtd = int(qtd)
+    else:
+        print("quantidade incorreta! Digite apenas números positivos!")
+        continue
+
+    encontrou_pedido = False
+
+    for item in cardapio:
+
+        comida, codigo, preco = item
+        
+        if comida == pedido or codigo == pedido:
+            if comida not in pedido_cliente:
+                pedido_cliente.append(comida)
+                qtd_pedido.append(qtd)
+                valor_pedido.append(preco * qtd)
+                valor_total += preco * qtd
+
+            else:
+                i_pedido = pedido_cliente.index(comida)
+                qtd_pedido[i_pedido] += qtd
+                valor_pedido[i_pedido] += preco * qtd
+                valor_total += preco * qtd
+            encontrou_pedido = True
+            break
+
+
+
+    if not encontrou_pedido:
+        print("Produto ou código não encontrado. Tente novamente ou digite \'fim\' para sair")
+
+
+
+print(f"{'=' * 15}DADOS DO PEDIDO{'=' * 15}")
+print(f"{'item':<15}{'quantidade':^20}{'preço':>8}")
+
+
+
+for pedido, valor, quantidade in zip(pedido_cliente, valor_pedido, qtd_pedido):
+    print(f"{pedido:<15}{'X':>10}{quantidade:^5}{'R$':>10}{valor}")
+
+print("=" * 45)
+print(f"Valor total: R${valor_total}")
